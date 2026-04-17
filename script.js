@@ -18,7 +18,7 @@ document.getElementById("meuFormulario").addEventListener("submit", function (ev
   // Formata o nome da Casa Legislativa dinamicamente usando o nome completo do Estado
   let nomeConstruido = `${tipoCasa} de ${municipio} - ${estado}`;
   if (tipoCasa === "Assembleia Legislativa") {
-      nomeConstruido = `Assembleia Legislativa do Estado de ${estado}`;
+      nomeConstruido = `Assembleia Legislativa do Estado - ${estado}`;
   }
 
   const dados = {
