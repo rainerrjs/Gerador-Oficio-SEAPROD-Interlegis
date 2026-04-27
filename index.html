@@ -67,6 +67,9 @@
     .btn-submit:hover { background-color: #001a33; }
 
     .divisor-interno { border: 0; border-top: 1px dashed #ccc; margin: 20px 0; }
+    
+    /* Classe para esconder os blocos dinâmicos */
+    .secao-escondida { display: none; padding-left: 20px; margin-top: 15px; border-left: 2px solid #ddd; }
   </style>
 </head>
 <body>
@@ -86,7 +89,6 @@
 
       <h3>Identificação da Casa Legislativa</h3>
       <div class="box-borda">
-        
         <div class="grid">
           <div class="campo">
             <label>Brasão (Imagem):*</label>
@@ -160,33 +162,47 @@
 
       <h3>1) Designação de Responsáveis Técnicos da Casa:</h3>
       <div class="box-borda">
-        <div id="containerResponsaveis">
-          <div class="responsavel-entry">
-            <div class="grid">
-              <div class="campo"><label>Nome Completo:</label><input type="text" class="rep-nome"></div>
-              <div class="campo"><label>CPF:</label><input type="text" class="rep-cpf"></div>
-              <div class="campo"><label>E-mail:</label><input type="email" class="rep-email"></div>
-              <div class="campo"><label>Telefone/WhatsApp:</label><input type="text" class="rep-tel"></div>
-              <div class="campo">
-                <label>Vínculo:</label>
-                <select class="rep-vinculo">
-                  <option value="(x) Efetivo/Concursado">Efetivo/Concursado</option>
-                  <option value="(x) Comissionado">Comissionado</option>
-                  <option value="(x) Terceirizado">Terceirizado</option>
-                  <option value="(x) Parlamentar">Parlamentar</option>
-                </select>
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="checkAddResp" onclick="toggleSecao('checkAddResp', 'secAddResp')"> Desejo designar responsáveis técnicos
+        </div>
+        
+        <div id="secAddResp" class="secao-escondida">
+            <div id="containerResponsaveis">
+              <div class="responsavel-entry">
+                <div class="grid">
+                  <div class="campo"><label>Nome Completo:</label><input type="text" class="rep-nome"></div>
+                  <div class="campo"><label>CPF:</label><input type="text" class="rep-cpf"></div>
+                  <div class="campo"><label>E-mail:</label><input type="email" class="rep-email"></div>
+                  <div class="campo"><label>Telefone/WhatsApp:</label><input type="text" class="rep-tel"></div>
+                  <div class="campo">
+                    <label>Vínculo:</label>
+                    <select class="rep-vinculo">
+                      <option value="(x) Efetivo/Concursado">Efetivo/Concursado</option>
+                      <option value="(x) Comissionado">Comissionado</option>
+                      <option value="(x) Terceirizado">Terceirizado</option>
+                      <option value="(x) Parlamentar">Parlamentar</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+            <button type="button" class="btn-add" onclick="addResponsavel()">+ Adicionar Responsável</button>
         </div>
-        <button type="button" class="btn-add" onclick="addResponsavel()">+ Adicionar Responsável</button>
-        
+
         <hr class="divisor-interno">
         
-        <div class="grid">
-          <div class="campo"><label>Para exclusão, informar nome(s) completo(s):</label><input type="text" id="exclusaoNome"></div>
-          <div class="campo"><label>Justificativa obrigatória da exclusão:</label><input type="text" id="exclusaoJust"></div>
+        <div class="checkbox-item">
+            <input type="checkbox" id="checkExcResp" onclick="toggleSecao('checkExcResp', 'secExcResp')"> Desejo excluir responsáveis técnicos
         </div>
+
+        <div id="secExcResp" class="secao-escondida">
+            <div class="grid">
+              <div class="campo"><label>Para exclusão, informar nome(s) completo(s):</label><input type="text" id="exclusaoNome"></div>
+              <div class="campo"><label>Justificativa obrigatória da exclusão:</label><input type="text" id="exclusaoJust"></div>
+            </div>
+        </div>
+
       </div>
 
       <div class="grid-alinhado">
@@ -201,9 +217,14 @@
         <div>
           <h3>3) Solicitação de desativação:</h3>
           <div class="box-borda">
-            <div class="checkbox-item"><input type="checkbox" id="checkDesat"> Autorizo desativar Produto(s)</div>
-            <div class="campo"><label>Produto(s) a desativar:</label><input type="text" id="prodDesat"></div>
-            <div class="campo"><label>Justificativa de desativação:</label><input type="text" id="justDesat"></div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="checkDesat" onclick="toggleSecao('checkDesat', 'secDesat')"> Autorizo desativar Produto(s)
+            </div>
+            
+            <div id="secDesat" class="secao-escondida">
+                <div class="campo"><label>Produto(s) a desativar:</label><input type="text" id="prodDesat"></div>
+                <div class="campo"><label>Justificativa de desativação:</label><input type="text" id="justDesat"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -212,9 +233,13 @@
       <div class="box-borda">
         
         <div class="checkbox-item"><input type="checkbox" id="checkHosp"> Hospedagem no Senado Federal</div>
-        <div class="checkbox-item"><input type="checkbox" id="checkDeleg"> Delegação para provedor externo</div>
         
-        <div style="padding-left: 20px; margin-top: 15px;">
+        <hr class="divisor-interno">
+        
+        <div class="checkbox-item">
+            <input type="checkbox" id="checkDeleg" onclick="toggleSecao('checkDeleg', 'secDeleg')"> Delegação para provedor externo
+        </div>
+        <div id="secDeleg" class="secao-escondida">
           <div class="grid">
             <div class="campo"><label>DS1:</label><input type="text" id="dnsDs1"></div>
             <div class="campo"><label>DS2:</label><input type="text" id="dnsDs2"></div>
@@ -224,32 +249,44 @@
 
         <hr class="divisor-interno">
 
-        <div class="checkbox-item"><input type="checkbox" id="checkDNSDominio"> Reapontamento DNS do domínio LEG.BR</div>
-        <div class="grid" style="margin-top: 15px; padding-left: 20px;">
-          <div class="campo"><label>Registro A (Endereço IP):</label><input type="text" id="regA"></div>
-          <div class="campo"><label>CNAME:</label><input type="text" id="cname"></div>
+        <div class="checkbox-item">
+            <input type="checkbox" id="checkDNSDominio" onclick="toggleSecao('checkDNSDominio', 'secDnsDom')"> Reapontamento DNS do domínio LEG.BR
+        </div>
+        <div id="secDnsDom" class="secao-escondida">
+          <div class="grid">
+            <div class="campo"><label>Registro A (Endereço IP):</label><input type="text" id="regA"></div>
+            <div class="campo"><label>CNAME:</label><input type="text" id="cname"></div>
+          </div>
         </div>
 
         <hr class="divisor-interno">
 
-        <div class="checkbox-item"><input type="checkbox" id="checkDNSEmail"> Reapontamento DNS do e-mail</div>
-        <div class="grid" style="margin-top: 15px; padding-left: 20px;">
-          <div class="campo"><label>Registro A (Endereço IP):</label><input type="text" id="emailRegA"></div>
-          <div class="campo"><label>Registro MX:</label><input type="text" id="regMx"></div>
-          <div class="campo"><label>TXT SPF:</label><input type="text" id="txtSpf"></div>
-          <div class="campo"><label>TXT DKIM:</label><input type="text" id="txtDkim"></div>
+        <div class="checkbox-item">
+            <input type="checkbox" id="checkDNSEmail" onclick="toggleSecao('checkDNSEmail', 'secDnsEmail')"> Reapontamento DNS do e-mail
+        </div>
+        <div id="secDnsEmail" class="secao-escondida">
+          <div class="grid">
+            <div class="campo"><label>Registro A (Endereço IP):</label><input type="text" id="emailRegA"></div>
+            <div class="campo"><label>Registro MX:</label><input type="text" id="regMx"></div>
+            <div class="campo"><label>TXT SPF:</label><input type="text" id="txtSpf"></div>
+            <div class="campo"><label>TXT DKIM:</label><input type="text" id="txtDkim"></div>
+          </div>
         </div>
 
       </div>
 
       <h3>5) Restauração de dados – Backup:</h3>
       <div class="box-borda">
-        <div class="checkbox-item"><input type="checkbox" id="checkBack"> Autorizo a retroação dos dados</div>
-        <div class="grid" style="margin-top: 15px;">
-          <div class="campo"><label>Produto (SAPL, Portal Modelo, etc):</label><input type="text" id="backProd"></div>
-          <div class="campo"><label>Data da posição (dd/mm/aaaa):</label><input type="text" id="backData"></div>
+        <div class="checkbox-item">
+            <input type="checkbox" id="checkBack" onclick="toggleSecao('checkBack', 'secBack')"> Autorizo a retroação dos dados
         </div>
-        <div class="campo"><label>Justificativa de restauração:</label><input type="text" id="backJust"></div>
+        <div id="secBack" class="secao-escondida">
+          <div class="grid">
+            <div class="campo"><label>Produto (SAPL, Portal Modelo, etc):</label><input type="text" id="backProd"></div>
+            <div class="campo"><label>Data da posição (dd/mm/aaaa):</label><input type="text" id="backData"></div>
+          </div>
+          <div class="campo"><label>Justificativa de restauração:</label><input type="text" id="backJust"></div>
+        </div>
       </div>
 
       <button type="submit" class="btn-submit">Gerar Ofício PDF</button>

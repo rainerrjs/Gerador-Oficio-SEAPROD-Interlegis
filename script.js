@@ -7,6 +7,24 @@ function addResponsavel() {
   container.appendChild(novoFilho);
 }
 
+function toggleSecao(checkboxId, containerId) {
+    const checkbox = document.getElementById(checkboxId);
+    const container = document.getElementById(containerId);
+    
+    if (checkbox && container) {
+        const estaMarcado = checkbox.checked;
+        
+        container.style.display = estaMarcado ? "block" : "none";
+        
+        const campos = container.querySelectorAll('input, select');
+        
+        campos.forEach(campo => {
+
+            campo.required = estaMarcado;
+        });
+    }
+}
+
 document.getElementById("meuFormulario").addEventListener("submit", function (event) {
   event.preventDefault();
   const brasaoInput = document.getElementById("brasao");
@@ -18,8 +36,13 @@ document.getElementById("meuFormulario").addEventListener("submit", function (ev
   // Formata o nome da Casa Legislativa dinamicamente usando o nome completo do Estado
   let nomeConstruido = `${tipoCasa} de ${municipio} - ${estado}`;
   if (tipoCasa === "Assembleia Legislativa") {
-      nomeConstruido = `Assembleia Legislativa do Estado - ${estado}`;
+      nomeConstruido = `Assembleia Legislativa do Estado de ${estado}`;
   }
+
+  // Lógica para capturar dados de Exclusão apenas se a caixinha estiver marcada
+  const checkExc = document.getElementById("checkExcResp") && document.getElementById("checkExcResp").checked;
+  const valExcNome = checkExc && document.getElementById("exclusaoNome").value ? document.getElementById("exclusaoNome").value : "____________________________________";
+  const valExcJust = checkExc && document.getElementById("exclusaoJust").value ? document.getElementById("exclusaoJust").value : "____________________________________";
 
   const dados = {
     nomeCasa: nomeConstruido,
@@ -37,8 +60,8 @@ document.getElementById("meuFormulario").addEventListener("submit", function (ev
     cep: document.getElementById("cepRodape").value || "70.000-123",
     siteRodape: document.getElementById("siteRodape").value || "sapelopolis.leg.br",
     
-    excNome: document.getElementById("exclusaoNome").value || "____________________________________",
-    excJust: document.getElementById("exclusaoJust").value || "____________________________________",
+    excNome: valExcNome,
+    excJust: valExcJust,
     
     c2_Leg: document.getElementById("checkLeg").checked ? "[x]" : "[ ]",
     c2_Portal: document.getElementById("checkPortal").checked ? "[x]" : "[ ]",
@@ -121,13 +144,21 @@ document.getElementById("meuFormulario").addEventListener("submit", function (ev
     pdf.setFont("times", "bold");
     pdf.text("1) Designação de Responsáveis Técnicos desta Casa:", margem, y);
     
-    const rows = Array.from(document.querySelectorAll(".responsavel-entry")).map(el => [
-      el.querySelector(".rep-nome").value,
-      el.querySelector(".rep-cpf").value,
-      el.querySelector(".rep-email").value,
-      el.querySelector(".rep-tel").value,
-      el.querySelector(".rep-vinculo").value
-    ]);
+    let rows = [];
+
+    // Verifica se a caixinha de ADICIONAR responsáveis técnicos está marcada
+    if (document.getElementById("checkAddResp") && document.getElementById("checkAddResp").checked) {
+      rows = Array.from(document.querySelectorAll(".responsavel-entry")).map(el => [
+        el.querySelector(".rep-nome") ? el.querySelector(".rep-nome").value : '',
+        el.querySelector(".rep-cpf") ? el.querySelector(".rep-cpf").value : '',
+        el.querySelector(".rep-email") ? el.querySelector(".rep-email").value : '',
+        el.querySelector(".rep-tel") ? el.querySelector(".rep-tel").value : '',
+        el.querySelector(".rep-vinculo") ? el.querySelector(".rep-vinculo").value : ''
+      ]);
+    } else {
+      // Se não estiver marcada, gera uma linha com 5 colunas totalmente vazias para o PDF
+      rows = [['', '', '', '', '']];
+    }
 
     pdf.autoTable({
       startY: y + 2,
